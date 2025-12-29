@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <div id="sciCalcWelcome" style="position:fixed;top:0;left:0;width:100%;height:100vh;background:#1a1a2e;z-index:999999;display:flex;justify-content:center;align-items:center;overflow:hidden;font-family:'Roboto Mono',monospace;">
+    
+    <!-- Circuit Board Background -->
+    <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:
+        linear-gradient(90deg,transparent 49px,rgba(0,150,255,0.1) 49px,rgba(0,150,255,0.1) 50px,transparent 50px),
+        linear-gradient(0deg,transparent 49px,rgba(0,150,255,0.1) 49px,rgba(0,150,255,0.1) 50px,transparent 50px);
+    background-size:50px 50px;animation:circuitFlow 20s linear infinite;"></div>
+    
+    <div style="position:relative;z-index:10;background:#16213e;border-radius:15px;padding:30px;width:450px;box-shadow:0 0 50px rgba(0,150,255,0.3);border:1px solid rgba(0,150,255,0.2);">
+        
+        <!-- Scientific Display -->
+        <div style="background:#0f3460;border-radius:8px;padding:15px;margin-bottom:25px;font-family:'Courier New';border:1px solid rgba(0,150,255,0.3);">
+            <div style="color:#00ffaa;font-size:0.9rem;opacity:0.7;margin-bottom:5px;">
+                SCIENTIFIC CALCULATOR v3.14
+            </div>
+            <div id="sciDisplay" style="color:#fff;font-size:1.8rem;text-align:right;min-height:40px;font-weight:bold;letter-spacing:1px;"></div>
+            <div style="color:#00aaff;font-size:0.9rem;text-align:right;min-height:20px;" id="memoryDisplay">
+                MEM: 0
+            </div>
+        </div>
+        
+        <!-- Function Keys -->
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:15px;">
+            <div class="sci-btn func">sin</div>
+            <div class="sci-btn func">cos</div>
+            <div class="sci-btn func">tan</div>
+            <div class="sci-btn func">log</div>
+            <div class="sci-btn func">ln</div>
+            <div class="sci-btn func">π</div>
+            
+            <div class="sci-btn func">sin⁻¹</div>
+            <div class="sci-btn func">cos⁻¹</div>
+            <div class="sci-btn func">tan⁻¹</div>
+            <div class="sci-btn func">10ˣ</div>
+            <div class="sci-btn func">eˣ</div>
+            <div class="sci-btn func">√</div>
+            
+            <div class="sci-btn func">x²</div>
+            <div class="sci-btn func">x³</div>
+            <div class="sci-btn func">xʸ</div>
+            <div class="sci-btn func">n!</div>
+            <div class="sci-btn func">RND</div>
+            <div class="sci-btn func">ANS</div>
+        </div>
+        
+        <!-- Main Keypad -->
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;">
+            <div class="sci-btn op">MC</div>
+            <div class="sci-btn op">MR</div>
+            <div class="sci-btn op">M+</div>
+            <div class="sci-btn op">M-</div>
+            <div class="sci-btn op">CE</div>
+            
+            <div class="sci-btn">7</div>
+            <div class="sci-btn">8</div>
+            <div class="sci-btn">9</div>
+            <div class="sci-btn op">÷</div>
+            <div class="sci-btn op">%</div>
+            
+            <div class="sci-btn">4</div>
+            <div class="sci-btn">5</div>
+            <div class="sci-btn">6</div>
+            <div class="sci-btn op">×</div>
+            <div class="sci-btn op">1/x</div>
+            
+            <div class="sci-btn">1</div>
+            <div class="sci-btn">2</div>
+            <div class="sci-btn">3</div>
+            <div class="sci-btn op">-</div>
+            <div class="sci-btn op" style="grid-row:span 2;">=</div>
+            
+            <div class="sci-btn zero">0</div>
+            <div class="sci-btn">.</div>
+            <div class="sci-btn op">+</div>
+        </div>
+        
+        <!-- System Status -->
+        <div style="margin-top:25px;padding:15px;background:rgba(0,150,255,0.1);border-radius:8px;">
+            <div style="display:flex;justify-content:space-between;color:#00aaff;font-size:0.9rem;">
+                <div>
+                    <span style="color:#00ffaa;">▶</span> System: <span id="sysStatus">CALIBRATING</span>
+                </div>
+                <div>
+                    CPU: <span id="cpuLoad">0%</span>
+                </div>
+            </div>
+            <div style="width:100%;height:4px;background:#0f3460;border-radius:2px;margin-top:10px;overflow:hidden;">
+                <div style="width:0%;height:100%;background:linear-gradient(90deg,#00aaff,#00ffaa);border-radius:2px;animation:sciLoad 5s ease-in-out forwards;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Watermark -->
+    <div style="position:absolute;bottom:20px;right:20px;color:rgba(0,150,255,0.3);font-size:0.8rem;">
+        KU6 SCI-CALC
+    </div>
+</div>
+
+<style>
+    .sci-btn {
+        background: #0f3460;
+        color: #e6f7ff;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 1px solid rgba(0,150,255,0.2);
+        user-select: none;
+    }
+    
+    .sci-btn:hover {
+        background: #1a4480;
+        transform: translateY(-1px);
+    }
+    
+    .sci-btn.func {
+        background: #00aaff;
+        color: #000;
+        font-size: 0.9rem;
+    }
+    
+    .sci-btn.op {
+        background: #ff6b6b;
+        color: white;
+    }
+    
+    .sci-btn.zero {
+        grid-column: span 2;
+    }
+    
+    @keyframes circuitFlow {
+        0% { background-position: 0 0; }
+        100% { background-position: 50px 50px; }
+    }
+    
+    @keyframes sciLoad {
+        0% { width: 0%; }
+        100% { width: 100%; }
+    }
+    
+    @keyframes blinkCursor {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+    }
+</style>
+
+<script>
+    const display = document.getElementById('sciDisplay');
+    const sysStatus = document.getElementById('sysStatus');
+    const cpuLoad = document.getElementById('cpuLoad');
+    const memoryDisplay = document.getElementById('memoryDisplay');
+    
+    const calculations = [
+        "sin(π/2) = 1",
+        "log₁₀(100) = 2",
+        "√(16) = 4",
+        "e⁰ = 1",
+        "5! = 120",
+        "2³ = 8",
+        "READY FOR CALCULATIONS"
+    ];
+    
+    let calcIndex = 0;
+    let cpuValue = 0;
+    
+    function showCalculation() {
+        if (calcIndex < calculations.length) {
+            display.textContent = calculations[calcIndex];
+            calcIndex++;
+            setTimeout(showCalculation, 800);
+        }
+    }
+    
+    // Update system status
+    function updateSystem() {
+        const statuses = ["CALIBRATING", "LOADING FUNCTIONS", "TESTING OPERATIONS", "READY"];
+        let statusIndex = 0;
+        
+        const statusInterval = setInterval(() => {
+            sysStatus.textContent = statuses[statusIndex];
+            statusIndex = (statusIndex + 1) % statuses.length;
+        }, 1000);
+        
+        // Update CPU load
+        const cpuInterval = setInterval(() => {
+            cpuValue += Math.random() * 15;
+            if (cpuValue > 100) {
+                cpuValue = 100;
+                clearInterval(cpuInterval);
+                clearInterval(statusInterval);
+                sysStatus.textContent = "READY";
+                sysStatus.style.color = "#00ffaa";
+            }
+            cpuLoad.textContent = Math.floor(cpuValue) + "%";
+            memoryDisplay.textContent = `MEM: ${Math.floor(Math.random() * 1000)}`;
+        }, 200);
+    }
+    
+    // Auto hide after 7 seconds
+    setTimeout(() => {
+        const screen = document.getElementById('sciCalcWelcome');
+        screen.style.opacity = '0';
+        screen.style.transition = 'opacity 1s ease';
+        
+        setTimeout(() => {
+            screen.style.display = 'none';
+        }, 1000);
+    }, 7000);
+    
+    // Initialize
+    window.onload = function() {
+        showCalculation();
+        updateSystem();
+        
+        // Add cursor blink
+        display.style.borderRight = '2px solid #00ffaa';
+        display.style.animation = 'blinkCursor 1s infinite';
+    };
+</script>
+</head>
+
+<body>
+    <div class="sticky-logo">
+        <div class="heart">❤️</div>
+        <div class="signature">Ahmad KU6</div>
+    </div>
+    <div class="calculator">
+        <input type="text" placeholder="0" id="input-box" readonly>
+        <div>
+            <button class="operator">AC</button>
+            <button class="operator">DEL</button>
+            <button class="operator">%</button>
+            <button class="operator">/</button>
+        </div>
+        <div>
+            <button>7</button>
+            <button>8</button>
+            <button>9</button>
+            <button class="operator">*</button>
+        </div>
+        <div>
+            <button>4</button>
+            <button>5</button>
+            <button>6</button>
+            <button class="operator">-</button>
+        </div>
+        <div>
+            <button>1</button>
+            <button>2</button>
+            <button>3</button>
+            <button class="operator">+</button>
+        </div>
+        <div>
+            <button>00</button>
+            <button>0</button>
+            <button>.</button>
+            <button class="equal-btn">=</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
